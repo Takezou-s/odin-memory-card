@@ -6,7 +6,6 @@ import useRotatePerspective from "../hooks/useRotatePerspective";
 import styles from "../styles/Card.module.css";
 import tiltStyles from "../styles/RotatePerspective.module.css";
 import cardBack from "../assets/poke-card-back.png";
-import pokeBall from "../assets/pokeball.png";
 
 function Card({ img, name, className, onClick, back, tilt }) {
   const [mouseMoveHandler, mouseLeaveHandler, rotatePerspectiveStyle, resetHook] = useRotatePerspective();
@@ -54,7 +53,7 @@ export function LoadingCard({ className }) {
   );
 }
 
-export function Loading2() {
+export function LoadingCube() {
   return (
     <div className={styles["cube-container"]}>
       <div className={styles.cubes}>

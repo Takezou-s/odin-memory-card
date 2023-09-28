@@ -1,8 +1,12 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 import Card, { LoadingCard } from "./Card";
+import StatusPrompt from "./StatusPrompt";
 
 import styles from "../styles/CardContainer.module.css";
+import pikaSad from "../assets/pika-sad.png";
+import pikachu from "../assets/pikachu.png";
+
 import { kebabToLiteral } from "../helpers/stringHelpers";
 import { shuffle } from "../helpers/arrayHelpers";
 
@@ -28,6 +32,10 @@ const reducer = (state, action) => {
       return { ...state, hideCards: false, cardPicked: false };
     case "GAME_OVER":
       return { ...state, gameOver: true };
+    case "SUCCESS":
+      return { ...state, success: true };
+    case "INIT":
+      return initialState;
     default:
       return state;
   }
@@ -39,23 +47,17 @@ const initialState = {
   error: "",
   pickedCards: [],
   gameOver: false,
+  success: false,
   hideCards: false,
   cardPicked: false,
 };
 
-function CardContainer({ count, className, onPickedCardsChanged }) {
+function CardContainer({ count, className, onCardPicked, onRetry }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [retry, setRetry] = useState(false);
+  const [continu3, setContinu3] = useState(false);
 
-  const cardClickHandler = (id) => {
-    if (state.gameOver) return;
-    if (state.pickedCards.findIndex((x) => x === id) >= 0) {
-      dispatch({ type: "GAME_OVER" });
-      return;
-    }
-    dispatch({ type: "CARD_PICKED", payload: id });
-  };
-
-  useEffect(() => {
+  const init = () => {
     dispatch({ type: "FETCH" });
     idArr.splice(0);
     while (count > 0) {
@@ -94,15 +96,52 @@ function CardContainer({ count, className, onPickedCardsChanged }) {
       dispatch({ type: "FETCH_SUCCESS", payload: pokeArr.filter((x) => x) });
     };
     fetchData();
+  };
+
+  const cardClickHandler = (id) => {
+    if (state.gameOver) return;
+    if (state.pickedCards.findIndex((x) => x === id) >= 0) {
+      dispatch({ type: "GAME_OVER" });
+      return;
+    }
+    dispatch({ type: "CARD_PICKED", payload: id });
+  };
+
+  const retryClickHandler = () => {
+    dispatch({ type: "INIT" });
+    setRetry(true);
+  };
+
+  const continueClickHandler = () => {
+    dispatch({ type: "INIT" });
+    setContinu3(true);
+  };
+
+  useEffect(() => {
+    if (retry) {
+      if (onRetry) onRetry();
+      setRetry(false);
+    }
+    if (continu3) {
+      setContinu3(false);
+    }
+    if (retry || continu3) {
+      init();
+    }
+  }, [retry, continu3]);
+
+  useEffect(() => {
+    init();
   }, []);
 
   useEffect(() => {
-    if (onPickedCardsChanged) onPickedCardsChanged(state.pickedCards);
-  }, [state.pickedCards]);
-
-  useEffect(() => {
     if (state.cardPicked) {
-      dispatch({ type: "HIDE_CARDS" });
+      if (onCardPicked) onCardPicked();
+      if (state.cards.length <= state.pickedCards.length) {
+        dispatch({ type: "SUCCESS" });
+      } else {
+        dispatch({ type: "HIDE_CARDS" });
+      }
     }
   }, [state.cardPicked]);
 
@@ -120,26 +159,38 @@ function CardContainer({ count, className, onPickedCardsChanged }) {
     };
   }, [state.hideCards]);
 
-  return (
-    <div className={styles["card-container"] + " " + (className || "")}>
-      {state.gameOver && <p>Game over...</p>}
-      {state.loading && <LoadingCard/>}
-      {state.error && <p>{state.error}</p>}
-      {!state.loading &&
-        !state.error &&
-        state.cards &&
-        state.cards.map((x) => (
-          <Card
-            key={x.id}
-            tilt={!state.hideCards}
-            back={state.hideCards}
-            name={x.name}
-            img={x.img}
-            onClick={cardClickHandler.bind(this, x.id)}
-          />
-        ))}
-    </div>
-  );
+  let children;
+
+  if (state.gameOver) {
+    children = <StatusPrompt buttonText={"Retry"} img={pikaSad} title={"Game Over"} onClick={retryClickHandler} />;
+  } else if (state.success) {
+    children = (
+      <StatusPrompt
+        success={true}
+        imgClass={styles["success-img"]}
+        buttonText={"Continue"}
+        img={pikachu}
+        title={"You Won!"}
+        onClick={continueClickHandler}
+      />
+    );
+  } else if (state.loading) {
+    children = <LoadingCard />;
+  } else if (state.error) {
+    children = <p>{state.error}</p>;
+  } else if (state.cards) {
+    children = state.cards.map((x) => (
+      <Card
+        key={x.id}
+        tilt={!state.hideCards}
+        back={state.hideCards}
+        name={x.name}
+        img={x.img}
+        onClick={cardClickHandler.bind(this, x.id)}
+      />
+    ));
+  }
+  return <div className={styles["card-container"] + " " + (className || "")}>{children}</div>;
 }
 
 export default CardContainer;
