@@ -1,15 +1,10 @@
 @font-face {
-  font-family: "Poke";
-  src: url("./assets/PokemonHollowNormal-pyPZ.ttf");
-}
-
-@font-face {
   font-family: "PokeSolid";
   src: url("./assets/PokemonSolidNormal-xyWR.ttf");
 }
 
 body {
-  background: url(./assets/poke-bg-1.jpg);
+  background: url(./poke-bg-1.jpg);
   font-family: "PokeSolid", sans-serif;
   margin: 0;
 }
