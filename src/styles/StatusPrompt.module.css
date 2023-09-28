@@ -1,0 +1,163 @@
+.container {
+  color: white;
+  background-color: rgba(14, 170, 197, 0.626);
+  padding: 16px 32px;
+  border-radius: 4px;
+  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+.container.success{
+  animation: success-anim 1.5s ease-in-out 0s 1 normal forwards;
+}
+.container.game-over{
+/* animation: game-over-anim 5s ease 0s 1 normal forwards; */
+  animation: game-over-anim2 3.5s ease 0s 1 normal forwards;
+}
+
+@keyframes success-anim {
+  0%,
+  50% {
+    transform-origin: bottom center;
+    transform: translateX(-50%) translateY(-50%) rotate(-7.5deg);
+  }
+  25%,
+  75% {
+    transform-origin: bottom center;
+    transform: translateX(-50%) translateY(-50%) rotate(7.5deg);
+  }
+  100% {
+    transform-origin: bottom center;
+    transform: translateX(-50%) translateY(-50%) rotate(0deg);
+  }
+}
+
+@keyframes game-over-anim2 {
+  0% {
+    transform: translateX(-50%) translateY(-50%);
+    scale: 7;
+  }
+  20% {
+    transform: translateX(-50%) translateY(-50%) rotate(-15deg);
+    scale: 0.4;
+  }
+  30% {
+    transform: translateX(-50%) translateY(-50%) rotate(5deg);
+    scale: 3;
+  }
+  40% {
+    scale: 1;
+  }
+  90% {
+    transform: translateX(-50%) translateY(-50%) rotate(5deg);
+  }
+  100% {
+    transform-origin: top right;
+    transform: translateX(-50%) translateY(-50%) rotate(-5deg);
+  }
+}
+
+@keyframes game-over-anim {
+  0% {
+    scale: 7;
+  }
+  10% {
+    scale: 0.4;
+    transform: rotate(-15deg);
+  }
+  15% {
+    scale: 3;
+    transform: rotate(5deg);
+  }
+  20% {
+    scale: 1;
+  }
+  97% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform-origin: top right;
+    transform: rotate(-5deg);
+  }
+}
+
+.status-prompt {
+  display: flex;
+  gap: 16px;
+  font-size: 48px;
+  align-items: center;
+}
+
+.status-prompt-img-container {
+  width: 120px;
+  height: 120px;
+  position: relative;
+}
+
+@media screen and (max-width: 500px) {
+  .status-prompt-img-container {
+    scale: 0.75;
+  }
+
+  .status-prompt-text {
+    font-size: 36px;
+  }
+}
+
+.status-prompt-img {
+  border-radius: 50%;
+  width: 160px;
+  height: 160px;
+  object-fit: none;
+  object-position: -158px -55px;
+  scale: 0.75;
+  position: absolute;
+  left: -20px;
+  top: -20px;
+}
+
+.status-prompt-text {
+  /* line-height: 0.55; */
+  line-height: 1.15;
+  padding-bottom: 20px;
+  text-wrap: nowrap;
+}
+
+.status-prompt-button {
+  display: block;
+  font-size: 16px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  /* padding: 13px 20px 13px; */
+  outline: 0;
+  border: 1px solid black;
+  cursor: pointer;
+  position: relative;
+  background-color: rgb(243 0 0 / 0%);
+  /* flex: 0 1 100%; */
+  flex-basis: 100%;
+  z-index: 0;
+  font-family: inherit;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 16px 0;
+}
+
+.status-prompt-button:after {
+  content: "";
+  background-color: #fed53d;
+  width: 100%;
+  z-index: -1;
+  position: absolute;
+  height: 100%;
+  top: 7px;
+  left: 7px;
+  transition: 0.2s;
+}
+
+.status-prompt-button:hover:after {
+  top: 0px;
+  left: 0px;
+}

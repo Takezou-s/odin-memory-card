@@ -1,3 +1,52 @@
+@font-face {
+  font-family: "Poke";
+  src: url("./assets/PokemonHollowNormal-pyPZ.ttf");
+}
+
+@font-face {
+  font-family: "PokeSolid";
+  src: url("./assets/PokemonSolidNormal-xyWR.ttf");
+}
+
 body {
-  background: url(./assets/poke-bg.jpg);
+  background: url(./assets/poke-bg-1.jpg);
+  font-family: "PokeSolid", sans-serif;
+  margin: 0;
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+  color: inherit;
+  text-decoration: none;
+}
+
+#root {
+  position: relative;
+  padding-bottom: 60px;
+  min-height: calc(100vh - 60px);
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+}
+
+footer > a {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 18px;
+  letter-spacing: 1.3px;
+  text-decoration: none;
+}
+
+footer > a > span {
+  padding-bottom: 5px;
 }
